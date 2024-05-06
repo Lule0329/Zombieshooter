@@ -31,7 +31,7 @@
         /// </summary>
         public bool Fire()
         {
-            if (lastTimeFired + fireRate >= DateTime.Now)
+            if (lastTimeFired + fireRate <= DateTime.Now)
             {
                 lastTimeFired = DateTime.Now;
                 return true;
