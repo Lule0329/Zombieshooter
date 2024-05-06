@@ -111,6 +111,8 @@
         {
             pic.Left = MIN_LEFT + (100 - locationPercent) * (MAX_LEFT - MIN_LEFT) / 100;
             label.Left = pic.Left;
+
+            // TODO update label text
         }
 
         /// <summary>
