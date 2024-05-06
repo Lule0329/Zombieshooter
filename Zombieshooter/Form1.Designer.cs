@@ -124,7 +124,6 @@
             labelScore.Size = new Size(114, 29);
             labelScore.TabIndex = 6;
             labelScore.Text = "SCORE: 0";
-            labelScore.Visible = false;
             // 
             // Form1
             // 
