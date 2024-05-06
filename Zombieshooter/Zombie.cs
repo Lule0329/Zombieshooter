@@ -135,10 +135,11 @@
         private static Label newLabel()
         {
             Label label = new Label();
-            label.Font = new Font("Stencil", 14, FontStyle.Bold);
+            label.Font = new Font("Stencil", 14, FontStyle.Regular);
             label.Top = 12;
             label.Left = 0; // set elsewhere
-            label.Width = 120;
+            label.Width = 130;
+            label.Height = 35;
             label.Text = "HP: 999"; // set elsewhere
             label.ForeColor = Color.White;
             label.BackColor = Color.Transparent;
