@@ -17,37 +17,34 @@
         // vägen fram och biter spelaren.
         private int locationPercent;
 
-        // fomuläret som zombien rör sig i
-        private Form form;
-
         // bild som representerar zombien
         private PictureBox pic;
 
         // text som visa antal hitpoints
         private Label label;
 
-        public Zombie(Form form, int hitPoints, int speedPercentPerSec, int locationPercent)
+        public Zombie(int hitPoints, int speedPercentPerSec, int locationPercent)
         {
             this.hitPoints = hitPoints;
             this.speedPercentPerSec = speedPercentPerSec;
             this.locationPercent = locationPercent;
-            this.form = form;
 
             // skapa en ny PictureBox och Label för varje zombie
             pic = newPic();
             label = newLabel();
-
-            // lägg till bilden och texten till formuläret för att det ska synas där
-            form.Controls.Add(pic);
-            form.Controls.Add(label);
-            pic.BringToFront();
-            label.BringToFront();
 
             // uppdatera läge för bild och text. dvs när zombien rör sig ska även bild och
             // text flytta sig.
             updateView();
         }
 
+        /// <summary>
+        /// Ger alla kontroller som tillhör zombien och som måste finnas i formuläret
+        /// </summary>
+        public List<Control> GetControls()
+        {
+            return new List<Control>() { pic, label };
+        }
 
         /// <summary>
         /// Flytta zombien ett avstånd som är i enlighet med hastigheten.
@@ -64,18 +61,15 @@
         }
 
         /// <summary>
-        /// Skjut zombien med en vapen. Zombien skadas lika mycket som vapnets damage. Om zombien
-        /// får slut på hitpoints ska den dö.
+        /// Skjut zombien med en vapen. Zombien skadas lika mycket som vapnets damage. Returnera
+        /// true om zombien dör.
         /// </summary>
         /// <param name="weapon">Vapen som skjuter på zombien</param>
-        public void Shoot(Weapon weapon)
+        public bool Shoot(Weapon weapon)
         {
             // TODO
 
-            if (NoHitpoints())
-            {
-                die();
-            }
+            return NoHitpoints();
         }
 
         /// <summary>
@@ -93,15 +87,6 @@
         public bool IsBiting()
         {
             return locationPercent >= 100;
-        }
-
-        /// <summary>
-        /// Ta bort bild och text från formuläret.
-        /// </summary>
-        private void die()
-        {
-            form.Controls.Remove(pic);
-            form.Controls.Remove(label);
         }
 
         /// <summary>
