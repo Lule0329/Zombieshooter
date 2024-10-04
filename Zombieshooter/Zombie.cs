@@ -67,7 +67,11 @@
         /// <param name="weapon">Vapen som skjuter på zombien</param>
         public bool Shoot(Weapon weapon)
         {
-            // TODO
+            // om vapnet inte är null så tas mängden damage som vaånet gör bort från zombiens hitpoints
+            if (weapon != null) 
+            {
+                hitPoints -= weapon.GetDamage();
+            }
 
             return NoHitpoints();
         }
@@ -77,7 +81,13 @@
         /// </summary>
         public bool NoHitpoints()
         {
-            // TODO
+            if (hitPoints <= 0)
+            {
+                pic.Visible = false;
+                label.Visible = false;
+                return true;
+            } 
+
             return false;
         }
 
@@ -97,7 +107,7 @@
             pic.Left = MIN_LEFT + (100 - locationPercent) * (MAX_LEFT - MIN_LEFT) / 100;
             label.Left = pic.Left;
 
-            // TODO update label text
+            label.Text = hitPoints.ToString();
         }
 
         /// <summary>
@@ -131,6 +141,12 @@
             label.ForeColor = Color.White;
             label.BackColor = Color.Transparent;
             return label;
+        }
+
+        public void HideZombie()
+        {
+            pic.Visible = false;
+            label.Visible = false;
         }
     }
 }

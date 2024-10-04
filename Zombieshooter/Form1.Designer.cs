@@ -37,6 +37,7 @@
             timerSpawn = new System.Windows.Forms.Timer(components);
             buttonStart = new Button();
             labelScore = new Label();
+            gameover = new Label();
             ((System.ComponentModel.ISupportInitialize)picShotgun).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picRevolver).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -124,6 +125,19 @@
             labelScore.Size = new Size(114, 29);
             labelScore.TabIndex = 6;
             labelScore.Text = "SCORE: 0";
+            labelScore.Click += labelScore_Click;
+            // 
+            // gameover
+            // 
+            gameover.AutoSize = true;
+            gameover.Font = new Font("Haettenschweiler", 48F, FontStyle.Regular, GraphicsUnit.Point);
+            gameover.ForeColor = SystemColors.ButtonHighlight;
+            gameover.Location = new Point(523, 103);
+            gameover.Name = "gameover";
+            gameover.Size = new Size(308, 84);
+            gameover.TabIndex = 7;
+            gameover.Text = "GAME OVER";
+            gameover.Visible = false;
             // 
             // Form1
             // 
@@ -133,6 +147,7 @@
             BackgroundImage = Properties.Resources.dualwield3;
             BackgroundImageLayout = ImageLayout.Zoom;
             ClientSize = new Size(1454, 340);
+            Controls.Add(gameover);
             Controls.Add(labelScore);
             Controls.Add(buttonStart);
             Controls.Add(label1);
@@ -158,5 +173,6 @@
         private System.Windows.Forms.Timer timerSpawn;
         private Button buttonStart;
         private Label labelScore;
+        private Label gameover;
     }
 }

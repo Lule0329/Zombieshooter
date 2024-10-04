@@ -6,8 +6,8 @@ namespace Zombieshooter
         List<Zombie> zombieList = new List<Zombie>();
 
         // vapen med olika egenskaper
-        Weapon revolver = new Weapon(50, TimeSpan.FromMilliseconds(200));
-        Weapon shotgun = new Weapon(200, TimeSpan.FromMilliseconds(600));
+        Weapon revolver = new Weapon(50, TimeSpan.FromMilliseconds(1000));
+        Weapon shotgun = new Weapon(100, TimeSpan.FromMilliseconds(2500));
 
         // ljudeffekt för shotgun
         System.Media.SoundPlayer shotgunSound =
@@ -25,6 +25,9 @@ namespace Zombieshooter
         System.Media.SoundPlayer zombieDeathSound =
             new System.Media.SoundPlayer(Properties.Resources.zombie_death);
 
+        // Spelarens score
+        int score = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -38,12 +41,7 @@ namespace Zombieshooter
         private void picShotgun_Click(object sender, EventArgs e)
         {
             shotgunSound.Play();
-
-            bool didFire = shotgun.Fire();
-            if (didFire)
-            {
-                // TODO skada första zombien
-            }
+            GunFire(shotgun);
         }
 
         /// <summary>
@@ -53,12 +51,27 @@ namespace Zombieshooter
         /// </summary>
         private void picRevolver_Click(object sender, EventArgs e)
         {
-            zombieDeathSound.Play();
+            revolverSound.Play();
+            GunFire(revolver);
+        }
 
-            bool didFire = revolver.Fire();
-            if (didFire)
+        private void GunFire(Weapon w) // samlar koden för alla vapen i en metod
+        {
+            bool didFire = w.Fire();
+
+            if (didFire && zombieList.Any()) // Kontrollera om listan inte är tom
             {
-                // TODO skada första zombien
+                var firstZombie = zombieList.First();
+                firstZombie.Shoot(w);
+
+                // Kolla om zombien har 0 eller mindre hitpoints
+                if (firstZombie.NoHitpoints())
+                {
+                    zombieDeathSound.Play();
+                    zombieList.Remove(firstZombie);
+                    score++;
+                    labelScore.Text = "Score: " + score;
+                }
             }
         }
 
@@ -68,7 +81,14 @@ namespace Zombieshooter
         /// </summary>
         private void loseGameIfZombieIsBiting()
         {
-            // TODO om zombie kommit hela vägen fram förlorar man spelet
+            if (zombieList.Any())
+            {
+                if (zombieList.First().IsBiting() == true)
+                {
+                    deathSound.Play();
+                    Clear(false);
+                }
+            }
         }
 
         /// <summary>
@@ -97,7 +117,7 @@ namespace Zombieshooter
         private void AddZombie()
         {
             // skapa ett nytt zombie-objekt
-            Zombie zombie = new Zombie(100, 15, 0);
+            Zombie zombie = new Zombie(100 * difficulty(), 15 * difficulty(), 0);
             // hämta och lägg till alla kontroller i zombien (picture, label m.m.)
             AddControls(zombie.GetControls());
             // lägg till zombien i zombielistan
@@ -132,9 +152,73 @@ namespace Zombieshooter
         /// </summary>
         private void buttonStart_Click(object sender, EventArgs e)
         {
+            Clear(true);
+            Restart();
+        }
+
+        public void Clear(bool restarted)
+        {
+            // Gör game over texten synlig och flyttar den längst fram.
+            // om spelaren startar om kommer inte game over synas.
+            if (restarted == false)
+            {
+                gameover.BringToFront();
+                gameover.Visible = true;
+                deathSound.Play();
+            }
+
+            // Stoppar spawn- och move timer's
+            timerMove.Enabled = false;
+            timerSpawn.Enabled = false;
+
+            // Gömmer varje zombie på spelplanen och rensar sedan listan med zombiesarna.
+            foreach (Zombie z in zombieList)
+            {
+                z.HideZombie();
+            }
+
+            zombieList.Clear();
+        }
+
+        public void Restart()
+        {
+            // Startar om alla timers
             timerMove.Start();
             timerSpawn.Start();
+
+            // Gömmer game over texten
+            gameover.Visible = false;
+
+            // Återställer spelarens score
+            score = 0;
+
+            // Spawnar en zombie
             AddZombie();
+        }
+
+        public int difficulty()
+        {
+            if (score >= 7)
+            {
+                return 2;
+            }
+            else if (score >= 15)
+            {
+                return 3;
+            }
+            else if (score >= 25)
+            {
+                return 4;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        private void labelScore_Click(object sender, EventArgs e)
+        {
+            score++;
         }
     }
 }
