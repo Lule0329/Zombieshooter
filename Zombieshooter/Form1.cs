@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Zombieshooter
 {
     public partial class Form1 : Form
@@ -27,6 +29,8 @@ namespace Zombieshooter
 
         // Spelarens score
         int score = 0;
+
+        int _highscore = 0;
 
         public Form1()
         {
@@ -70,7 +74,7 @@ namespace Zombieshooter
                     zombieDeathSound.Play();
                     zombieList.Remove(firstZombie);
                     score++;
-                    labelScore.Text = "Score: " + score;
+                    labelScore.Text = "SCORE: " + score;
                 }
             }
         }
@@ -117,7 +121,7 @@ namespace Zombieshooter
         private void AddZombie()
         {
             // skapa ett nytt zombie-objekt
-            Zombie zombie = new Zombie(100 * difficulty(), 15 * difficulty(), 0);
+            Zombie zombie = new Zombie(100 * Difficulty(), 15 * Difficulty(), 0);
             // hämta och lägg till alla kontroller i zombien (picture, label m.m.)
             AddControls(zombie.GetControls());
             // lägg till zombien i zombielistan
@@ -190,13 +194,25 @@ namespace Zombieshooter
             gameover.Visible = false;
 
             // Återställer spelarens score
+            if (score > _highscore)
+            {
+                if (int.Parse(ReadFile("\\Users\\lule0329\\Desktop\\Score.txt")) < score)
+                {
+                    _highscore = score;
+                    SaveScore("\\Users\\lule0329\\Desktop\\Score.txt");
+                }
+            }
+
             score = 0;
+
+            labelScore.Text = "SCORE: " + score;
+            highscore.Text = "HIGHSCORE: " + _highscore;
 
             // Spawnar en zombie
             AddZombie();
         }
 
-        public int difficulty()
+        public int Difficulty()
         {
             if (score >= 7)
             {
@@ -219,6 +235,27 @@ namespace Zombieshooter
         private void labelScore_Click(object sender, EventArgs e)
         {
             score++;
+        }
+
+        private void SaveScore(string path)
+        {
+            // objekt som hjälper till att skriva text till fil
+            StreamWriter writetext = new StreamWriter(path);
+
+            writetext.Write(_highscore.ToString());
+
+            writetext.Close();
+        }
+
+        private string ReadFile(string path)
+        {
+            // objekt som hjälper till att läsa text från fil
+            StreamReader readtext = new StreamReader(path);
+
+            string result = readtext.ReadLine();
+            readtext.Close();
+
+            return result.ToString();
         }
     }
 }

@@ -38,6 +38,7 @@
             buttonStart = new Button();
             labelScore = new Label();
             gameover = new Label();
+            highscore = new Label();
             ((System.ComponentModel.ISupportInitialize)picShotgun).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picRevolver).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
@@ -120,7 +121,7 @@
             labelScore.BackColor = Color.Transparent;
             labelScore.Font = new Font("Stencil", 14F, FontStyle.Regular, GraphicsUnit.Point);
             labelScore.ForeColor = Color.White;
-            labelScore.Location = new Point(255, 297);
+            labelScore.Location = new Point(251, 297);
             labelScore.Name = "labelScore";
             labelScore.Size = new Size(114, 29);
             labelScore.TabIndex = 6;
@@ -139,6 +140,18 @@
             gameover.Text = "GAME OVER";
             gameover.Visible = false;
             // 
+            // highscore
+            // 
+            highscore.AutoSize = true;
+            highscore.BackColor = Color.Transparent;
+            highscore.Font = new Font("Stencil", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            highscore.ForeColor = Color.White;
+            highscore.Location = new Point(413, 297);
+            highscore.Name = "highscore";
+            highscore.Size = new Size(175, 29);
+            highscore.TabIndex = 8;
+            highscore.Text = "HIGHSCORE: 0";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -147,6 +160,7 @@
             BackgroundImage = Properties.Resources.dualwield3;
             BackgroundImageLayout = ImageLayout.Zoom;
             ClientSize = new Size(1454, 340);
+            Controls.Add(highscore);
             Controls.Add(gameover);
             Controls.Add(labelScore);
             Controls.Add(buttonStart);
@@ -174,5 +188,6 @@
         private Button buttonStart;
         private Label labelScore;
         private Label gameover;
+        private Label highscore;
     }
 }
